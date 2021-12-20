@@ -6,5 +6,6 @@ namespace ChatHub.API.Controllers
    
     public class AccountController : BaseApiController
     {
+
     }
 }

@@ -8,22 +8,22 @@ namespace Infrastructure.Repositories
 {
     public class RepositoryBase<T> : IAsyncRepository<T> where T : class
     {
-        public readonly ChatAppContext _dbContext;
+        protected readonly ChatAppContext DbContext;
 
         public RepositoryBase(ChatAppContext dbxContext)
         {
-            _dbContext = dbxContext;
+            DbContext = dbxContext;
         }
         /// <inheritdoc />
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await DbContext.Set<T>().ToListAsync();
         }
 
         /// <inheritdoc />
         public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbContext.Set<T>().Where(predicate).ToListAsync();
+            return await DbContext.Set<T>().Where(predicate).ToListAsync();
         }
 
         /// <inheritdoc />
@@ -32,7 +32,7 @@ namespace Infrastructure.Repositories
                                                      string includeString = null,
                                                      bool disableTracking = true)
         {
-            IQueryable<T> query = _dbContext.Set<T>();
+            IQueryable<T> query = DbContext.Set<T>();
             if (disableTracking) query = query.AsNoTracking();
             if (!string.IsNullOrWhiteSpace(includeString)) query = query.Include(includeString);
             if (predicate != null) query = query.Where(predicate);
@@ -43,26 +43,26 @@ namespace Infrastructure.Repositories
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await DbContext.Set<T>().FindAsync(id); 
         }
 
         public async Task<T> AddAsync(T entity)
         {
-            _dbContext.Set<T>().Add(entity);
-            await _dbContext.SaveChangesAsync();
+            DbContext.Set<T>().Add(entity);
+            await DbContext.SaveChangesAsync();
             return entity;
         }
 
         public async Task UpdateAsync(T entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            DbContext.Entry(entity).State = EntityState.Modified;
+            await DbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(T entity)
         {
-            _dbContext.Set<T>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            DbContext.Set<T>().Remove(entity);
+            await DbContext.SaveChangesAsync();
         }
     }
 }

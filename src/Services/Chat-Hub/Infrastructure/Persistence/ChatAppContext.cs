@@ -46,7 +46,7 @@ namespace Infrastructure.Persistence
                 }
             }
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppUser).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChatAppContext).Assembly);
 
 
          

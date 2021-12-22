@@ -11,6 +11,8 @@ namespace Infrastructure.EntityConfigurations
             // AppUser
             builder.HasMany(ur => ur.UserRoles).WithOne(u => u.AppUser)
                 .HasForeignKey(ur => ur.UserId).IsRequired();
+
+            builder.HasIndex(u => u.UserName).IsUnique(true);
         }
     }
 }

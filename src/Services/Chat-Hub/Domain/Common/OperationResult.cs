@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Common
+﻿namespace Domain.Common
 {
     public class OperationResult : OperationResult<object>
     {
@@ -81,7 +75,7 @@ namespace Domain.Common
         public string Msg { get; set; }
 
 
-        protected T Data { get; set; }
+        public T Data { get; set; }
 
       
         public bool Ok => Status == ResultStatus.Success;

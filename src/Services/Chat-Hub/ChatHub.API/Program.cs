@@ -1,9 +1,17 @@
+using Application.Extensions;
+using Infrastructure.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var services=builder.Services.AddSwaggerGen();
+var configuration = builder.Configuration;
+services.AddControllers();
+
+services.AddApplicationServices();
+services.AddInfrastructureServices(configuration);
 
 var app = builder.Build();
 
@@ -18,25 +26,26 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+//var summaries = new[]
+//{
+//    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+//};
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-       new WeatherForecast
-       (
-           DateTime.Now.AddDays(index),
-           Random.Shared.Next(-20, 55),
-           summaries[Random.Shared.Next(summaries.Length)]
-       ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+//app.MapGet("/weatherforecast", () =>
+//{
+//    var forecast = Enumerable.Range(1, 5).Select(index =>
+//       new WeatherForecast
+//       (
+//           DateTime.Now.AddDays(index),
+//           Random.Shared.Next(-20, 55),
+//           summaries[Random.Shared.Next(summaries.Length)]
+//       ))
+//        .ToArray();
+//    return forecast;
+//})
+//.WithName("GetWeatherForecast");
 
+app.MapControllers();
 app.Run();
 
 internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)

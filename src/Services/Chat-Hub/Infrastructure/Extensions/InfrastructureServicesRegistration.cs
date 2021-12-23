@@ -15,7 +15,7 @@ namespace Infrastructure.Extensions
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<ChatAppContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("OrderingConnectionString")));
+                options.UseSqlServer(configuration.GetConnectionString("ChatApp")));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
             services.AddScoped<IUserRepository, UserRepository>();

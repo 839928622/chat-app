@@ -11,9 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatHub.API", "Services\Cha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Services\Chat-Hub\Domain\Domain.csproj", "{725FDAFD-4BF6-45D0-A8DE-2063392824FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Services\Chat-Hub\Application\Application.csproj", "{2BD5D84B-4EFE-4E19-8565-33C570C9AF1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Services\Chat-Hub\Application\Application.csproj", "{2BD5D84B-4EFE-4E19-8565-33C570C9AF1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Services\Chat-Hub\Infrastructure\Infrastructure.csproj", "{BB116823-EA3A-489B-9D00-2BE3D2204932}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Services\Chat-Hub\Infrastructure\Infrastructure.csproj", "{BB116823-EA3A-489B-9D00-2BE3D2204932}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B0CD2E8E-0A10-4046-902C-1DEBE70757EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Services\Chat-Hub\Tests\UnitTests\UnitTests.csproj", "{BFE6E180-749E-4C82-803E-43728AB4D8F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,10 @@ Global
 		{BB116823-EA3A-489B-9D00-2BE3D2204932}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB116823-EA3A-489B-9D00-2BE3D2204932}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB116823-EA3A-489B-9D00-2BE3D2204932}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFE6E180-749E-4C82-803E-43728AB4D8F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFE6E180-749E-4C82-803E-43728AB4D8F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFE6E180-749E-4C82-803E-43728AB4D8F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFE6E180-749E-4C82-803E-43728AB4D8F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +55,8 @@ Global
 		{725FDAFD-4BF6-45D0-A8DE-2063392824FA} = {731802C2-005F-4821-B6DB-601B4E4FC5C7}
 		{2BD5D84B-4EFE-4E19-8565-33C570C9AF1D} = {731802C2-005F-4821-B6DB-601B4E4FC5C7}
 		{BB116823-EA3A-489B-9D00-2BE3D2204932} = {731802C2-005F-4821-B6DB-601B4E4FC5C7}
+		{B0CD2E8E-0A10-4046-902C-1DEBE70757EA} = {731802C2-005F-4821-B6DB-601B4E4FC5C7}
+		{BFE6E180-749E-4C82-803E-43728AB4D8F7} = {B0CD2E8E-0A10-4046-902C-1DEBE70757EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {867CABED-288E-4895-8F86-6B7D5FCB4839}

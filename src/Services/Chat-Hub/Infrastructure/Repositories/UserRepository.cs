@@ -12,9 +12,10 @@ namespace Infrastructure.Repositories
 
         }
 
-        public async Task<AppUser> GetUserByUsernameAsync(string username)
+
+        public async Task<AppUser?> GetUserByUsernameAsync(string username)
         {
-            return await DbContext.Users.Include(p => p.Photos).SingleOrDefaultAsync(x => x.UserName == username);
+            return await DbContext.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == username);
         }
     }
 }

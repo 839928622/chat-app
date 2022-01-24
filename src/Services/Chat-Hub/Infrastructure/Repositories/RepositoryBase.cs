@@ -27,9 +27,9 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate,
+        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>>? predicate,
                                                      Func<IQueryable<T>, IOrderedQueryable<T>> orderBy,
-                                                     string includeString = null,
+                                                     string? includeString = null,
                                                      bool disableTracking = true)
         {
             IQueryable<T> query = DbContext.Set<T>();
@@ -41,7 +41,7 @@ namespace Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id)
         {
             return await DbContext.Set<T>().FindAsync(id); 
         }

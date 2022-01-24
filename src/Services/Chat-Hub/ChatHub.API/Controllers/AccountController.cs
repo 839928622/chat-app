@@ -1,4 +1,6 @@
-﻿using Application.Features.Account.Commands.CreateNewUser;
+﻿using System.Net;
+using Application.Features.Account.Commands.CreateNewUser;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +15,8 @@ public class AccountController : BaseApiController
         _mediator = mediator;
     }
     [HttpPost("register")]
+    [ProducesResponseType(typeof(RegisteredUserDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<ActionResult> Register(CreateNewUserCommand input)
     {
       var res=  await _mediator.Send(input);

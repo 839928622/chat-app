@@ -2,8 +2,7 @@
 {
     public class RegisteredUserDto
     {
-        public string UserName { get; set; }
-        public string Token { get; set; }
-   
+        public string UserName { get; set; } = null!;
+        public string Token { get; set; } = null!;
     }
 }

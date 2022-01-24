@@ -10,7 +10,7 @@ namespace Application.Attributes
             this.MinAge = minAge;
         }
 
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
             if (value == null) return false;
             var dateTimeOffset = (DateTimeOffset)value;

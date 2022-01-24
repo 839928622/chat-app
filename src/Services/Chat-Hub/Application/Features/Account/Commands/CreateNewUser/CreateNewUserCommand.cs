@@ -5,19 +5,21 @@ using MediatR;
 
 namespace Application.Features.Account.Commands.CreateNewUser
 {
-    public class CreateNewUserCommand : IRequest<OperationResult<RegisteredUserDto>>
+    public record CreateNewUserCommand : IRequest<OperationResult<RegisteredUserDto>>
     {
         [Required]
-        public string Username { get; set; }
+        public string Username { get; init; } = null!;
+
         [Required]
         [StringLength(8, MinimumLength = 4)]
-        public string Password { get; set; }
+        public string Password { get; init; } = null!;
 
-        [Required] public string KnowAs { get; set; }
-        [Required] public string Gender { get; set; }
+        [Required] public string KnowAs { get; init; } = null!;
+        [Required] public string Gender { get; init; } = null!;
+
         [AgeMustAfterOrEqualTo(18, ErrorMessage = "your age must after or equal to 18")]
-        [Required] public DateTimeOffset DateOfBirth { get; set; }
-        [Required] public string City { get; set; }
-        [Required] public string Country { get; set; }
+        [Required] public DateTimeOffset DateOfBirth { get; init; }
+        [Required] public string City { get; init; } = null!;
+        [Required] public string Country { get; init; } = null!;
     }
 }

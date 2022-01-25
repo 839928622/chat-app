@@ -14,7 +14,7 @@ namespace Application.Features.Account.Commands.CreateNewUser
         [StringLength(8, MinimumLength = 4)]
         public string Password { get; init; } = null!;
 
-        [Required] public string KnowAs { get; init; } = null!;
+        [Required] public string KnownAs { get; init; } = null!;
         [Required] public string Gender { get; init; } = null!;
 
         [AgeMustAfterOrEqualTo(18, ErrorMessage = "your age must after or equal to 18")]

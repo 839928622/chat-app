@@ -28,7 +28,7 @@ namespace Application.Features.Account.Commands.CreateNewUser
             var user = new AppUser()
             {
                 UserName = request.Username,
-                KnownAs = request.KnowAs,
+                KnownAs = request.KnownAs,
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,
                 City = request.City,
@@ -42,9 +42,9 @@ namespace Application.Features.Account.Commands.CreateNewUser
             //await _context.Users.AddAsync(user);
             //await _context.SaveChangesAsync();
             var result = await _userManager.CreateAsync(user, request.Password);
-            if (!result.Succeeded) return OperationResult<RegisteredUserDto>.Error("An error occurs while creating an new user."); 
+            if (result is {Succeeded: false}) return OperationResult<RegisteredUserDto>.Error("An error occurs while creating an new user."); 
             var roleResult = await _userManager.AddToRoleAsync(user, "Member");
-            if (!roleResult.Succeeded) return OperationResult<RegisteredUserDto>.Error("An error occurs while adding a new user to Member role");
+            if (roleResult is { Succeeded: false }) return OperationResult<RegisteredUserDto>.Error("An error occurs while adding a new user to Member role");
             var res = new RegisteredUserDto
             {
                 UserName = user.UserName,

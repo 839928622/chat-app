@@ -28,16 +28,17 @@ namespace Infrastructure.Repositories
 
         /// <inheritdoc />
         public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>>? predicate,
-                                                     Func<IQueryable<T>, IOrderedQueryable<T>> orderBy,
+                                                     Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy,
                                                      string? includeString = null,
                                                      bool disableTracking = true)
         {
             IQueryable<T> query = DbContext.Set<T>();
-            if (disableTracking) query = query.AsNoTracking();
+           
             if (!string.IsNullOrWhiteSpace(includeString)) query = query.Include(includeString);
             if (predicate != null) query = query.Where(predicate);
             if (orderBy != null) return await orderBy(query).ToListAsync();
 
+            if (disableTracking) query = query.AsNoTracking();
             return await query.ToListAsync();
         }
 

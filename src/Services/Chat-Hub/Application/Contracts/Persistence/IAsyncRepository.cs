@@ -7,7 +7,7 @@ namespace Application.Contracts.Persistence
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate);
         Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>>? predicate,
-                                        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy,
+                                        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy,
                                         string? includeString = null,
                                         bool disableTracking = true);
 

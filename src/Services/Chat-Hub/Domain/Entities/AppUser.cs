@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Shared.Enums.AppUserEntity;
 
 namespace Domain.Entities
 {
@@ -17,7 +18,7 @@ namespace Domain.Entities
         public DateTimeOffset Created { get; set; } = DateTimeOffset.Now;
 
         public DateTimeOffset LastActive { get; set; } = DateTimeOffset.Now;
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
         public string Introduction { get; set; }
         public string LookingFor { get; set; }
         public string Interests { get; set; }

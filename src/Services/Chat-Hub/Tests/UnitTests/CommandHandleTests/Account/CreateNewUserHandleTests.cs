@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using Shared.Enums.AppUserEntity;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -42,7 +43,7 @@ namespace UnitTests.CommandHandleTests.Account
                 Username = "username",
                 Password = "password",
                 KnownAs = "KnownAs",
-                Gender = "Female",
+                Gender = Gender.Female,
                 DateOfBirth = DateTimeOffset.Now,
                 City = "London",
                 Country = "England",
@@ -68,7 +69,7 @@ namespace UnitTests.CommandHandleTests.Account
                 Username = "username",
                 Password = "password",
                 KnownAs = "KnownAs",
-                Gender = "Female",
+                Gender = Gender.Female,
                 DateOfBirth = DateTimeOffset.Now,
                 City = "London",
                 Country = "England",

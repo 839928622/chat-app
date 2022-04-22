@@ -2,6 +2,7 @@
 using Application.Attributes;
 using Domain.Common;
 using MediatR;
+using Shared.Enums.AppUserEntity;
 
 namespace Application.Features.Account.Commands.CreateNewUser
 {
@@ -15,7 +16,7 @@ namespace Application.Features.Account.Commands.CreateNewUser
         public string Password { get; init; } = null!;
 
         [Required] public string KnownAs { get; init; } = null!;
-        [Required] public string Gender { get; init; } = null!;
+        [Required] public Gender Gender { get; init; } 
 
         [AgeMustAfterOrEqualTo(18, ErrorMessage = "your age must after or equal to 18")]
         [Required] public DateTimeOffset DateOfBirth { get; init; }

@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.Enums.AppUserEntity;
 
 namespace Infrastructure.EntityConfigurations
 {
@@ -17,7 +18,7 @@ namespace Infrastructure.EntityConfigurations
             builder.HasIndex(u => u.UserName).IsUnique().HasDatabaseName("IX_UserName");
             builder.Property(u => u.KnownAs).HasMaxLength(256);
             builder.Property(u => u.UserName).HasMaxLength(16);
-            builder.Property(u => u.Gender).HasMaxLength(8);
+            builder.Property(u => u.Gender).HasMaxLength(8).HasConversion(c=>c.ToString(),c => Enum.Parse<Gender>(c));
             builder.Property(u => u.Introduction).HasMaxLength(512);
             builder.Property(u => u.LookingFor).HasMaxLength(256);
             builder.Property(u => u.Interests).HasMaxLength(256);

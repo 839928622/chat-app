@@ -1,0 +1,8 @@
+export interface PaginationResult<T>
+{
+Data: T[];
+CurrentPage: number;
+ItemsPerPage: number;
+TotalItems: number;
+TotalPages: number;
+}

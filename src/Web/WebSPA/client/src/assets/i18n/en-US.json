@@ -1,0 +1,74 @@
+{
+  "translate":{
+    "language":"English"
+  },
+  "nav":{
+    "username":"username", "password":"password", "welcome":"Welcome",   "login":"Login",
+    "matches":"Matches",   "lists":"Lists",       "messages":"Messages", "profile":"Profile",
+    "logout":"Logout"
+  },
+  "home":{
+    "findYourMatch":"Find and make friends",
+    "Introduction":"Come on in to view your matches... all you need to do is sing up ",
+    "register":"Register",
+    "more":"Learn more"
+  },
+  "register": {
+    "signup":"Sign up", "Im":"I am a", "male":"Male", "female":"Female", "others":"Others",
+    "username":"UserName", "password":"Password","confirm-password":"Confirm Password",
+    "knownAs":"Known As", "birthday":"Date Of Birth",
+    "username.required":"Please enter your username", "password.required":"Please enter your password",
+    "password.minlength":"Password must be at least 8 charaters", "password.maxlength":"Password must be at least 8 charaters",
+    "confirm-password.required":"Please enter your Confirm password", "confirm-password.match":" Confirm password must match your password",
+    "knowAs.required":"Please enter your knowAs", "birthday.required":"Please enter your date of birth",
+    "city":"Please enter your city", "country":"Please enter your country" , "register":"Register",
+    "cancel":"Cancel"
+
+  },
+  "member-list": {
+    "matches":"Your matches", "found":"Found", "age-from":"Age from", "age-to":"Age to", "show":"Show",
+    "males":"Males","females":"Females","others":"Others",
+    "apply-filters":"Apply Filters", "reset-filters":"Reset Filters", "last-active":"Last Active",
+    "newest-members":"Newest Members"
+
+  },
+  "member-card":{
+    "online":"Online","offline":"Offline"
+  },
+  "member-detail":{
+    "location":"Location", "age":"Age", "last-active":"Last Active", "member-since":"Member since",
+    "like":"Like", "message":"Message", "description":"Description", "about":"About",
+    "looking-for":"Looking for", "interests":"Interests","photos":"Photos","messages":"Messages"
+  },
+  "member-messages":{
+   "no-messages":"No messages yet... say hi by using the message box below",
+   "unread":"unread", "read":"read", "send":"Send","private-message":"Send a private message"
+  },
+  "messages":{
+    "unread":"Unread", "inbox":"Inbox", "outbox":"Outbox", "no-messages":"No messages",
+    "message":"Message", "from":"From", "to":"To", "sent":"Sent", "received":"Received",
+    "delete":"Delete"
+  },
+  "lists":{
+    "members-I-like":"Members I like","members-like-me":"Members who like me"
+  },
+  "member-edit": {
+    "profile":"Your profile","infomation":"Infomation","tips":"Your have made changes. Any unsaved changes will be lost", "location":"Location","age":"Age",
+    "last-active":"Last Active", "member-since":"Member since", "save":"Save","about":"About",
+    "description":"Description", "looking-for":"Looking for", "interests":"Interests",
+    "location-details":"Location Details","city":"City", "country":"Country","edit-photos":"Edit Photos"
+  },
+  "photo-editor":{
+    "main":"Main", "add":"Add Photos","drag&drop":"Drop your photos here","multiple":"Multiple",
+    "single":"Single","upload-queue":"Upload queue", "queue-length":"Queue length","name":"Name",
+    "size":"Size","queue-progress":"Queue progress","upload-all":"Upload all","cancel-all":"Cancel all",
+    "remove-all":"Remove all"
+  },
+  "account-service":{
+    "welcome":"you are logged in, welcome"
+  },
+  "confirm-service":{
+   "title":"Confirmation", "message":"Are you sure you wannt to do this?","btnOkText":"OK","btnCancelText":"Cancel"
+
+  }
+}

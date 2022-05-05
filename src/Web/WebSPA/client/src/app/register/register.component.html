@@ -1,0 +1,119 @@
+<!--  pressing Enter will triggle ngSubmit -->
+<form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
+  <h2 class="text-center text-primary">{{'register.signup' | translate }}</h2>
+  <hr>
+
+  <div class="form-group">
+    <label class="control-label" style="margin-right: 10px;">{{'register.Im' | translate }}:</label>
+    <label  class="radio-inline mr-2">
+      <input type="radio" value="male" formControlName="gender"> {{'register.male' | translate }}
+    </label>
+    <label  class="radio-inline mr-2" >
+      <input type="radio" value="female" formControlName="gender"> {{'register.female' | translate }}
+    </label>
+    <label  class="radio-inline  mr-2">
+      <input type="radio" value="others" formControlName="gender"> {{'register.others' | translate }}
+    </label>
+  </div>
+  <div class="form-group">
+    <input
+    type="text"
+    class="form-control"
+    formControlName="username"
+    autocomplete="username"
+    placeholder="{{'register.username' | translate }}"
+    [ngClass]="(registerForm.get('username').errors && registerForm.get('username').touched) ? 'is-invalid': '' " />
+
+    <div class="invalid-feedback" *ngIf="registerForm.get('username').hasError('required')">
+      {{'register.username.required' | translate }}
+    </div>
+  </div>
+  <div class="form-group">
+    <input type="password" autocomplete="new-password"
+    class="form-control"
+    formControlName="password"
+    placeholder="{{'register.password' | translate }}"
+    [class.is-invalid]="registerForm.get('password').errors && registerForm.get('password').touched"
+      />
+      <div class="invalid-feedback" *ngIf="registerForm.get('password').hasError('required')">
+        {{'register.password.required' | translate }}
+      </div>
+      <!-- 'maxlength' need to be lowwer case,please do carefor that  -->
+      <div class="invalid-feedback" *ngIf="registerForm.get('password').hasError('minlength')">
+        {{'register.password.minlength' | translate }}
+      </div>
+      <div class="invalid-feedback" *ngIf="registerForm.get('password').hasError('maxlength')">
+        {{'register.password.maxlength' | translate }}
+      </div>
+  </div>
+
+  <div class="form-group">
+    <input type="password" autocomplete="new-password"
+    class="form-control"
+    formControlName="confirmPassword"
+    placeholder="{{'register.confirm-password' | translate }}"
+    [class.is-invalid]="registerForm.get('confirmPassword').errors && registerForm.get('confirmPassword').touched"
+    >
+    <div class="invalid-feedback" *ngIf="registerForm.get('confirmPassword').hasError('required')">
+      {{'register.confirm-password.required' | translate }}
+     </div>
+    <div class="invalid-feedback" *ngIf="registerForm.get('confirmPassword').hasError('isMatching')">
+      {{'register.confirm-password.match' | translate }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text"
+    class="form-control"
+    formControlName="knowAs"
+    placeholder="{{'register.knownAs' | translate }}"
+    [class.is-invalid]="registerForm.get('knowAs').errors && registerForm.get('knowAs').touched"
+    >
+    <div class="invalid-feedback" *ngIf="registerForm.get('knowAs').hasError('required')">
+      {{'register.knowAs.required' | translate }}
+     </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text" bsDatepicker #dp="bsDatepicker"
+    [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+    [maxDate]="maxDate"
+    class="form-control"
+    formControlName="dateOfBirth"
+    placeholder="{{'register.birthday' | translate }}"
+    [class.is-invalid]="registerForm.get('dateOfBirth').errors && registerForm.get('dateOfBirth').touched"
+    >
+    <div class="invalid-feedback" *ngIf="registerForm.get('dateOfBirth').hasError('required')">
+      {{'register.birthday.required' | translate }}
+     </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text"
+    class="form-control"
+    formControlName="city"
+    placeholder="{{'register.city' | translate }}"
+    [class.is-invalid]="registerForm.get('city').errors && registerForm.get('city').touched"
+    >
+    <div class="invalid-feedback" *ngIf="registerForm.get('knowAs').hasError('required')">
+      {{'register.city' | translate }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="text"
+    class="form-control"
+    formControlName="country"
+    placeholder="{{'register.country' | translate }}"
+    [class.is-invalid]="registerForm.get('country').errors && registerForm.get('country').touched"
+    >
+    <div class="invalid-feedback" *ngIf="registerForm.get('country').hasError('required')">
+      {{'register.country' | translate }}
+    </div>
+  </div>
+
+  <div class="form-group text-center">
+   <button class="btn btn-success mr-2" type="submit" [disabled]="registerForm.invalid">{{'register.register' | translate }}</button>
+   <button class="btn btn-default mr-2" (click)="cancel()">{{'register.cancel' | translate }}</button>
+  </div>
+</form>

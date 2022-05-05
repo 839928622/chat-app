@@ -15,12 +15,11 @@ namespace Infrastructure.Persistence
 
         }
         //public DbSet<AppUser> Users { get; set; }
-        public DbSet<UserLike> Likes { get; set; }
+        //public DbSet<UserLike> Likes { get; set; }
 
         public DbSet<Message> Message { get; set; }
 
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<Connection> Connections { get; set; }
+        public DbSet<Photo> Photo { get; set; }
 
         /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,8 +53,7 @@ namespace Infrastructure.Persistence
            
 
           
-            //Connection
-            modelBuilder.Entity<Connection>().ToTable("Connections");
+           
 
         }
     }

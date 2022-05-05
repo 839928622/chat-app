@@ -8,9 +8,13 @@ namespace Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<AppRole> builder)
         {
-            // AppRole
+            // AppRole\
+            builder.ToTable(nameof(AppRole));
+
             builder.HasMany(ur => ur.UserRoles).WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId).IsRequired();
+
+
         }
     }
 }

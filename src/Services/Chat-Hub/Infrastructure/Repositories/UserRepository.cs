@@ -15,7 +15,12 @@ namespace Infrastructure.Repositories
 
         public async Task<AppUser?> GetUserByUsernameAsync(string username)
         {
-            return await DbContext.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == username);
+            return await ChatAppDbContext.Users.FirstOrDefaultAsync(x => x.UserName == username);
+        }
+
+        public async Task<AppUser> GetRequiredUserByIdAsync(int id)
+        {
+            return await ChatAppDbContext.Users.SingleAsync(x => x.Id == id);
         }
     }
 }

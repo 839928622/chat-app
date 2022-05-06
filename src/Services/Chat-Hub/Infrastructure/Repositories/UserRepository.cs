@@ -1,15 +1,24 @@
 ﻿using Application.Contracts.Persistence;
+using Application.Features.Member.Queries.GetMembers;
 using Domain.Entities;
+using Infrastructure.Extensions;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Shared.Common;
+using Shared.Enums.RedisUsage;
 
 namespace Infrastructure.Repositories
 {
     public class UserRepository :RepositoryBase<AppUser>, IUserRepository
     {
-        public UserRepository(ChatAppContext dbxContext) : base(dbxContext)
-        {
 
+        private readonly ChatAppContext _context;
+        private readonly IDistributedCache _distributedCache;
+        public UserRepository(ChatAppContext dbxContext, IDistributedCache distributedCache) : base(dbxContext)
+        {
+            _context = dbxContext;
+            _distributedCache = distributedCache;
         }
 
 
@@ -21,6 +30,79 @@ namespace Infrastructure.Repositories
         public async Task<AppUser> GetRequiredUserByIdAsync(int id)
         {
             return await ChatAppDbContext.Users.SingleAsync(x => x.Id == id);
+        }
+
+        /// <inheritdoc />
+        public async Task<PaginationResult<MemberToReturnDto>> GetMembersAsync(MemberFilterParams memberFilter)
+        {
+            var minDateOfBirth = DateTimeOffset.Now.AddYears(-memberFilter.MaxAge - 1);
+            var maxDateOfBirth = DateTimeOffset.Now.AddYears(-memberFilter.MinAge);
+            var query = ChatAppDbContext.Users.Where(x => x.Id != memberFilter.CurrentUserId
+                                                          && x.Gender == memberFilter.Gender
+                                                          && x.DateOfBirth >= minDateOfBirth && x.DateOfBirth <= maxDateOfBirth);
+            query = memberFilter.OrderBy switch
+            {
+                "created" => query.OrderByDescending(x => x.Created),
+
+                _ => query.OrderByDescending(u => u.LastActive)
+            };
+
+            var pagedResultInInt = await PaginationResult<int>
+                .CreateAsync(query.Select(x => x.Id), memberFilter.PageNumber, memberFilter.PageSize);
+            var tasks = pagedResultInInt.Data.Select(GetMemberInfoById);
+            var tasksResult = await Task.WhenAll(tasks);
+            return new PaginationResult<MemberToReturnDto>(tasksResult, pagedResultInInt.CurrentPage,
+                pagedResultInInt.ItemsPerPage, pagedResultInInt.TotalItems, pagedResultInInt.TotalPages);
+        }
+
+        /// <inheritdoc />
+        public async Task<MemberToReturnDto?> GetMemberInfoById(int userId)
+        {
+            var key = $"{RedisKeyCategory.Cache}:{nameof(AppUser)}:{userId}";
+            var recordInCache = await _distributedCache.GetRecordAsync<AppUser>(key);
+            if (recordInCache != null)
+            {
+                return new MemberToReturnDto
+                {
+                    Id = recordInCache.Id,
+                    UserName = recordInCache.UserName,
+                    Gender = recordInCache.Gender,
+                    Age = recordInCache.DateOfBirth.CalculateAge(),
+                    KnownAs = recordInCache.KnownAs,
+                    Created = recordInCache.Created,
+                    LastActive = recordInCache.LastActive,
+                    Introduction = recordInCache.Introduction,
+                    LookingFor = recordInCache.LookingFor,
+                    Interests = recordInCache.Interests,
+                    City = recordInCache.City,
+                    Country = recordInCache.Country
+                };
+            }
+            // if this record under high concurrency access,may need to add a lock here
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                // if record is  null then make it expired as soon as possible
+                await _distributedCache.SetRecordAsync(key, user, TimeSpan.FromMinutes(1));
+                return null;
+            }
+            await _distributedCache.SetRecordAsync(key, user, TimeSpan.FromDays(1));
+            return new MemberToReturnDto
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Gender = user.Gender,
+                Age = user.DateOfBirth.CalculateAge(),
+                KnownAs = user.KnownAs,
+                Created = user.Created,
+                LastActive = user.LastActive,
+                Introduction = user.Introduction,
+                LookingFor = user.LookingFor,
+                Interests = user.Interests,
+                City = user.City,
+                Country = user.Country
+            };
         }
     }
 }

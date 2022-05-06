@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Application.Extensions;
 using ChatHub.API.Middleware;
 using ChatHub.API.SignalR;
@@ -5,8 +6,10 @@ using Domain.Entities;
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories.Seed;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +18,59 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 var services=builder.Services.AddSwaggerGen();
 var configuration = builder.Configuration;
-services.AddControllers();
+services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 services.AddSignalR();
-
+// Application
 services.AddApplicationServices();
+// Infrastructure
 services.AddInfrastructureServices(configuration);
+// swagger gen
+services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ChatApp API", Version = "v1" });
+    var securitySchema = new OpenApiSecurityScheme()
+    {
+        Description = "JWT Auth Bearer Schema",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Type = SecuritySchemeType.Http,
+        Reference = new OpenApiReference()
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = JwtBearerDefaults.AuthenticationScheme,
+        }
+    };
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securitySchema);
+    var securityRequirement = new OpenApiSecurityRequirement()
+    {
+        {securitySchema, new List<string>() {JwtBearerDefaults.AuthenticationScheme} }
+    };
+    options.AddSecurityRequirement(securityRequirement);
+});
+//cors
+services.AddCors(options =>
+{
+    //development cors
+    options.AddPolicy("DevCorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+    });
+    // production  cors
+    options.AddPolicy("ProdCorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+    });
+    // staging cors
+    options.AddPolicy("StagingCorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+    });
+});
+
 
 var app = builder.Build();
 
@@ -48,7 +99,20 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("DevCorsPolicy");
 }
+else if (app.Environment.IsStaging())
+{
+    app.UseCors("StagingCorsPolicy");
+}
+else
+{
+    app.UseCors("ProdCorsPolicy");
+}
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence");
 app.MapHub<MessageHub>("hubs/message");

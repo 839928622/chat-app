@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Infrastructure.Extensions
 {
@@ -21,7 +23,10 @@ namespace Infrastructure.Extensions
                 var jsonData = await cache.GetStringAsync(key);
                 return jsonData is null ? 
                     default(T) : 
-                    System.Text.Json.JsonSerializer.Deserialize<T>(jsonData);
+                    System.Text.Json.JsonSerializer.Deserialize<T>(jsonData,new JsonSerializerOptions()
+                    {
+                        Converters = { new JsonStringEnumConverter() }
+                    });
             }
         }
 	

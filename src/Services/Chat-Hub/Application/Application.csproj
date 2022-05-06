@@ -12,9 +12,11 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Member\Commands\" />
     <Folder Include="Features\Photo\Commands\" />
   </ItemGroup>
 

@@ -4,25 +4,46 @@
   style="overflow: scroll; height: 535px;"
   [scrollTop]="scrollMe.scrollHeight"
   >
-    <div *ngIf="(memberMessages$ | async )?.length ===0">
+    <div *ngIf="(recentMessageBetweenTwoMembers$ | async )?.length ===0">
       {{'member-messages.no-messages' | translate}}
     </div>
     <ul
 
-    *ngIf="(memberMessages$ | async )?.length > 0">
-      <li *ngFor="let message of (memberMessages$ | async )">
-        <div>
+    *ngIf="(recentMessageBetweenTwoMembers$ | async )?.length > 0">
+      <li *ngFor="let message of (recentMessageBetweenTwoMembers$ | async )">
+
+        <div *ngIf="message.senderId == currentUserId">
           <span class="chat-img float-right">
-            <img class="rounded-circle" src="{{message.senderMainPhotoUrl || './assets/user.png'}}" alt="{{message.senderUsername}}">
+            <img class="rounded-circle" src="{{currentUserMainPhotoUrl || './assets/defaultAvatar.png'}}" alt="User Main Photo Url">
           </span>
           <div class="chat-body">
             <div class="header">
               <small class="text-muted">
                 <span class="fa fa-clock-o">{{message.messageSent | timeago }}</span>
-                <span class="text-danger" *ngIf="!message.dateRead && message.senderUsername !== usernameThatIamTalkingTo">
+                <span class="text-danger" *ngIf="!message.dateRead && message.senderId !== userIdThatIamTalkingTo">
                   ({{'member-messages.unread' | translate}})
                 </span>
-                <span class="text-success" *ngIf="message.dateRead && message.senderUsername !== usernameThatIamTalkingTo">
+                <span class="text-success" *ngIf="message.dateRead && message.recipientId !== userIdThatIamTalkingTo">
+                  ({{'member-messages.read' | translate}} {{message.dateRead | timeago}})
+                </span>
+              </small>
+            </div>
+            <p>{{ message.content }}</p>
+          </div>
+        </div>
+
+        <div *ngIf="message.senderId != currentUserId">
+          <span class="chat-img float-left">
+            <img class="rounded-circle" src="{{anotherUserMainPhotoUrl || './assets/defaultAvatar.png'}}" alt="User Main Photo Url">
+          </span>
+          <div class="chat-body">
+            <div class="header">
+              <small class="text-muted">
+                <span class="fa fa-clock-o">{{message.messageSent | timeago }}</span>
+                <span class="text-danger" *ngIf="!message.dateRead && message.senderId !== userIdThatIamTalkingTo">
+                  ({{'member-messages.unread' | translate}})
+                </span>
+                <span class="text-success" *ngIf="message.dateRead && message.recipientId !== currentUserId">
                   ({{'member-messages.read' | translate}} {{message.dateRead | timeago}})
                 </span>
               </small>

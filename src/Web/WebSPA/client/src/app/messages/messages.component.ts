@@ -1,5 +1,5 @@
+import { IOffsetPagination } from './../models/IOffsetPagination';
 import { Component, OnInit } from '@angular/core';
-import { IPagination } from '../models/IPagination';
 import { IMessage } from '../models/message';
 import { MessageService } from '../services/message.service';
 
@@ -10,7 +10,7 @@ import { MessageService } from '../services/message.service';
 })
 export class MessagesComponent implements OnInit {
   messages: IMessage[] = [];
-  pagination: IPagination;
+  paginationMessages: IOffsetPagination<IMessage[]>;
   container = 'Unread';
   pageNumber = 1;
   pageSize = 5;
@@ -24,8 +24,8 @@ export class MessagesComponent implements OnInit {
   loadMessages(): void {
     this.loading = true;
     this.messageService.getMessages(this.pageNumber, this.pageSize, this.container).subscribe(respnse => {
-      this.messages = respnse.result;
-      this.pagination = respnse.pagination;
+      this.messages = respnse.data;
+      this.paginationMessages = respnse;
       this.loading = false;
     });
   }

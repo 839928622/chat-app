@@ -6,9 +6,9 @@ namespace Application.Features.Account.Queries.Login
 {
     public class LoginRequest : IRequest<OperationResult<UserLoginSuccessReturnDto>>
     {
+        [Required] 
+        public string Username { get; set; } = null!;
         [Required]
-        public string Username { get; set; }
-        [Required]
-        public string Password { get; set; }
+        public string Password { get; set; } = null!;
     }
 }

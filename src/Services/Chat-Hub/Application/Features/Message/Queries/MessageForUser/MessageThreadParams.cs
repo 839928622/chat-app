@@ -1,4 +1,5 @@
-﻿using Shared.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using Shared.Common;
 
 namespace Application.Features.Message.Queries.MessageForUser
 {
@@ -11,6 +12,8 @@ namespace Application.Features.Message.Queries.MessageForUser
         /// <summary>
         /// the user  that I am talking to
         /// </summary>
+         [Required]
         public int AnotherUserId { get; set; }
+        
     }
 }

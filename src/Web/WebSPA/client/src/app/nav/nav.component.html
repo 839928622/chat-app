@@ -38,7 +38,7 @@
       </ng-container>
          <app-translate></app-translate>
       <div  class="dropdown" dropdown *ngIf="(currentUser$ | async) as user">
-            <span class="mr-1"> <img src="{{user.mainPhotoUrl|| '/assets/user.jpg'}}" alt="{{user.userName}}"></span>
+            <span class="mr-1"> <img src="{{user.mainPhotoUrl|| '/assets/defaultAvatar.png'}}" alt="{{user.userName}}"></span>
             <a class="dropdown-toggle text-light"  dropdownToggle>
               {{'nav.welcome' | translate }} {{ user.userName }}
             </a>
@@ -48,13 +48,13 @@
                <div class="dropdown-divider"></div>
               <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i>{{'nav.logout' | translate }}</a>
             </div>
-          </div>
+        </div>
       <form #loginForm="ngForm" *ngIf="(currentUser$ | async) === null"  class="form-inline my-2 my-lg-0" (ngSubmit)="login()" autocomplete="off">
 
         <input class="form-control mr-sm-2" type="text" autocomplete="username" name="username" [(ngModel)] ="model.username" placeholder="{{'nav.username' | translate}}" required >
 
         <input class="form-control mr-sm-2" type="password" autocomplete="current-password" name="password" [(ngModel)] ="model.password" placeholder="{{'nav.password' | translate}}" required >
-        <button  class="btn btn-success my-2 my-sm-0" type="submit">{{'nav.login' | translate}}</button>
+        <button  class="btn btn-success my-2 my-sm-0" [disabled]="loginForm.invalid" type="submit">{{'nav.login' | translate}}</button>
       </form>
   </div>
 

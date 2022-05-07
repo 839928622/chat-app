@@ -32,7 +32,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     // intl.strings = stringsEs;
     // intl.changes.next();
      this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
-       this.currentUser = user;
+     this.currentUser = user;
      });
 
      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -47,9 +47,18 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
       this.member = data.member;
     });
 
+    // loading user photos
+    this.memberService.getPhotosByUserId(this.member.id).subscribe(photos => {
+    this.member.photos = photos;
+    this.galleryImages = this.member.photos.map( (element) => {
+      return {small: element?.url, medium: element?.url, big: element?.url};
+    });
+  });
     this.route.queryParams.subscribe(params => {
       params.tab ? this.selectTab(params.tab) : this.selectTab(0);
     });
+
+
 
     // galleryOPtions[]
     this.galleryOPtions = [
@@ -59,12 +68,6 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
         preview: false
       }
     ];
-
-    this.galleryImages = this.member.photos.map( (element) => {
-      return {small: element?.url, medium: element?.url, big: element?.url};
-    });
-
-
   }
 
   // getImages(): NgxGalleryImage[] {
@@ -91,9 +94,9 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     // tabId=3 is message tab
     if (tabId === 3) {
      // this.loadMessages();
-      this.messageService.createHubConnection(this.currentUser);
+      this.messageService.createHubConnection(this.currentUser, this.member.id);
       // get recent 5 messages
-      this.messageService.getMessageThread(this.member.id);
+      this.messageService.getRecentMessagesBetweenTwoUsers(this.member.id + '');
     } else{
       this.messageService.stopHubConnection();
     }

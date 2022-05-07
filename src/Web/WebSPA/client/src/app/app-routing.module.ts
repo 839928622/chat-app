@@ -17,7 +17,7 @@ import { MemberDetailResolver } from './resolver/member-detail.resolver';
 const routes: Routes = [
   {path: '', component: HomeComponent}, {path: 'members', component: MemberListComponent, canActivate: [AuthGuard]},
   {path: '', runGuardsAndResolvers: 'always', canActivate: [AuthGuard],
-  children: [{path: 'members/:username', component: MemberDetailComponent, resolve: { member: MemberDetailResolver } },
+  children: [{path: 'members/:userId', component: MemberDetailComponent, resolve: { member: MemberDetailResolver } },
   { path: 'member/edit', component: MemberEditComponent, canDeactivate: [PreventUnsavedChangesGuard]},
    {path: 'lists', component: ListsComponent},
   {path: 'messages', component: MessagesComponent}, {path: 'admin', component: AdminPanelComponent, canActivate: [AdminGuard] } ]},

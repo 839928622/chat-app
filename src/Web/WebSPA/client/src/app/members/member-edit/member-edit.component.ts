@@ -15,7 +15,7 @@ import { MembersService } from 'src/app/services/members.service';
 export class MemberEditComponent implements OnInit {
   @ViewChild('userProfileForm') userProfileForm: NgForm;
   member: IMember;
-  user: IUser;
+  currentUser: IUser;
   @HostListener('window:beforeunload', ['$event']) unloadNotification($event: any): void {
    if (this.userProfileForm.dirty) {
      $event.returnValue = true;
@@ -24,7 +24,7 @@ export class MemberEditComponent implements OnInit {
   constructor(private accountService: AccountService, private memberService: MembersService,
               private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
-      this.user = user;
+      this.currentUser = user;
     });
    }
 
@@ -33,8 +33,7 @@ export class MemberEditComponent implements OnInit {
   }
 
   loadMember(): void {
-    console.log(this.user);
-    this.memberService.getMember(this.user.userName).subscribe(member => {
+    this.memberService.getSingleMember(this.currentUser.userId).subscribe(member => {
       this.member = member;
     });
   }

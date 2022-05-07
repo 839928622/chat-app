@@ -75,7 +75,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<PaginationResult<MessageDto>> GetMessageThread(int currentUserId,MessageThreadParams messageThreadParams)
+        public async Task<PaginationResult<MessageDto>> GetMessageBetweenTwoUsers(int currentUserId,MessageThreadParams messageThreadParams)
         {
             var messages =  _context.Message
                 //.Include(u => u.Sender).ThenInclude(p => p.Photos)
@@ -87,17 +87,30 @@ namespace Infrastructure.Repositories
                     m.RecipientId == messageThreadParams.AnotherUserId &&
                     m.SenderId == currentUserId && 
                     m.SenderDeleted == false)
-                .OrderBy(x => x.MessageSent)
+                .OrderByDescending(x => x.MessageSent) // get recent messages , and font-end will do the sorting job
                 ;
-            
 
-            var pagedResultInInt = await PaginationResult<int>
-                .CreateAsync(messages.Select(x => x.Id).AsQueryable(), messageThreadParams.PageNumber, messageThreadParams.PageSize);
-            var tasks = pagedResultInInt.Data.Select(GetMessageByIdFromCache);
-            var tasksResult = await Task.WhenAll(tasks);
+            var selectPart = messages.Select(x => new MessageDto()
+            {
+                Id = x.Id,
+                SenderId = x.SenderId,
+                RecipientId = x.RecipientId,
+                Content = x.Content,
+                DateRead = x.DateRead,
+                MessageSent = x.MessageSent,
+            });
 
-            return new PaginationResult<MessageDto>(tasksResult, pagedResultInInt.CurrentPage,
-                pagedResultInInt.ItemsPerPage, pagedResultInInt.TotalItems, pagedResultInInt.TotalPages);
+            return await PaginationResult<MessageDto>
+                .CreateAsync(selectPart, messageThreadParams.PageNumber, messageThreadParams.PageSize);
+
+            // can not use cache like this
+
+            //var pagedResultInInt = await PaginationResult<int>
+            //    .CreateAsync(messages.Select(x => x.Id).AsQueryable(), messageThreadParams.PageNumber, messageThreadParams.PageSize);
+            //var tasks = pagedResultInInt.Data.Select(GetMessageByIdFromCache);
+            //var tasksResult = await Task.WhenAll(tasks);
+
+
         }
 
 

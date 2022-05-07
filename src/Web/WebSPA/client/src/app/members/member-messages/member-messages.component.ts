@@ -14,15 +14,25 @@ import { MessageService } from 'src/app/services/message.service';
 export class MemberMessagesComponent implements OnInit {
   @ViewChild('messageForm') messageForm: NgForm;
   @Input() messages: IMessage[];
-  @Input() usernameThatIamTalkingTo: string;
+
+  @Input() currentUserMainPhotoUrl?: string;
+  @Input() anotherUserMainPhotoUrl?: string;
+
+  @Input() currentUserId: number;
+  @Input() userIdThatIamTalkingTo: number;
   messageContent: string;
-  memberMessages$: Observable<IMessage[]>;
+  recentMessageBetweenTwoMembers$: Observable<IMessage[]>;
   constructor(private messageService: MessageService, private toastr: ToastrService,
               ) { }
 
   ngOnInit(): void {
     // this.loadMessages();
-    this.memberMessages$ = this.messageService.messageThread$;
+    this.recentMessageBetweenTwoMembers$ = this.messageService.recentMessage$;
+    // loading conversation(messages) between two users
+    this.messageService.getRecentMessagesBetweenTwoUsers(this.userIdThatIamTalkingTo + '')
+    .subscribe(offsetPaginatedMessage => {
+     this.messageService.publishMessagesToMessageSource(offsetPaginatedMessage.data);
+    });
   }
 
   // loadMessages(): void {
@@ -33,12 +43,10 @@ export class MemberMessagesComponent implements OnInit {
 
   sendMessage(): void{
     if (this.messageContent === undefined || this.messageContent.length === 0) {
-      this.toastr.error('You can not send empty message');
+      this.toastr.error('You are not allowed to send an empty message');
       return;
     }
-
-    console.log('this.usernameThatIamTalkingTo', this.usernameThatIamTalkingTo);
-    this.messageService.sendMessage(this.usernameThatIamTalkingTo, this.messageContent)
+    this.messageService.sendMessage(this.userIdThatIamTalkingTo, this.messageContent)
     .then(() => {
       this.messageForm.reset();
     });

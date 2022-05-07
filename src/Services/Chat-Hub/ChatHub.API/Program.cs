@@ -22,11 +22,17 @@ services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
-services.AddSignalR();
+services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+
+});
 // Application
 services.AddApplicationServices();
 // Infrastructure
 services.AddInfrastructureServices(configuration);
+// PresenceTracker
+services.AddSingleton<PresenceTracker>();
 // swagger gen
 services.AddSwaggerGen(options =>
 {
@@ -57,17 +63,17 @@ services.AddCors(options =>
     //development cors
     options.AddPolicy("DevCorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+        policy.AllowAnyHeader().AllowCredentials().AllowAnyMethod().WithOrigins("http://localhost:4200");
     });
     // production  cors
     options.AddPolicy("ProdCorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+        policy.AllowAnyHeader().AllowCredentials().AllowAnyMethod().WithOrigins("http://localhost:4200");
     });
     // staging cors
     options.AddPolicy("StagingCorsPolicy", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+        policy.AllowAnyHeader().AllowCredentials().AllowAnyMethod().WithOrigins("http://localhost:4200");
     });
 });
 

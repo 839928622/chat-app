@@ -5,7 +5,7 @@ namespace Application.DataTransferObjects.SignalR.Message
     public class CreateMessageDto
     {
         [Required]
-        public string RecipientUsername { get; set; } = null!;
+        public int RecipientUserId { get; set; } 
         [Required]
         public string Content { get; set; } = null!;
     }

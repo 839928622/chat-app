@@ -27,7 +27,7 @@ namespace Application.Contracts.Persistence
         /// <param name="currentUserId">The user that currently has logged in</param>
         /// <param name="messageThreadParams"></param>
         /// <returns></returns>
-        Task<PaginationResult<MessageDto>> GetMessageThread(int currentUserId,MessageThreadParams messageThreadParams);
+        Task<PaginationResult<MessageDto>> GetMessageBetweenTwoUsers(int currentUserId,MessageThreadParams messageThreadParams);
 
 
         /// <summary>

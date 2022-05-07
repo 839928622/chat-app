@@ -17,7 +17,7 @@ namespace Infrastructure.Extensions
         {
             services.AddDbContext<ChatAppContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ChatApp"))
-                , ServiceLifetime.Transient);
+                , ServiceLifetime.Scoped); // default ServiceLifetime is Scoped
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
             services.AddScoped<IUserRepository, UserRepository>();

@@ -47,12 +47,31 @@ namespace Infrastructure.Repositories
                 _ => query.OrderByDescending(u => u.LastActive)
             };
 
-            var pagedResultInInt = await PaginationResult<int>
-                .CreateAsync(query.Select(x => x.Id), memberFilter.PageNumber, memberFilter.PageSize);
-            var tasks = pagedResultInInt.Data.Select(GetMemberInfoById);
-            var tasksResult = await Task.WhenAll(tasks);
-            return new PaginationResult<MemberToReturnDto>(tasksResult, pagedResultInInt.CurrentPage,
-                pagedResultInInt.ItemsPerPage, pagedResultInInt.TotalItems, pagedResultInInt.TotalPages);
+          var selectPart=  query.Select(x => new MemberToReturnDto()
+            {
+               
+                Id = x.Id,
+                UserName = x.UserName,
+                Gender = x.Gender,
+                Age = x.DateOfBirth.CalculateAge(),
+                KnownAs = x.KnownAs,
+                Created = x.Created,
+                LastActive = x.LastActive,
+                Introduction = x.Introduction,
+                LookingFor = x.LookingFor,
+                Interests = x.Interests,
+                City = x.City,
+                Country = x.Country
+            
+            });
+
+            return await PaginationResult<MemberToReturnDto>
+                .CreateAsync(selectPart, memberFilter.PageNumber, memberFilter.PageSize);
+
+            //var tasks = pagedResultInInt.Data.Select(GetMemberInfoById);
+            //var tasksResult = await Task.WhenAll(tasks);
+            //return new PaginationResult<MemberToReturnDto>(tasksResult, pagedResultInInt.CurrentPage,
+            //    pagedResultInInt.ItemsPerPage, pagedResultInInt.TotalItems, pagedResultInInt.TotalPages);
         }
 
         /// <inheritdoc />

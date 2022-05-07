@@ -38,7 +38,7 @@
      <div *ngIf="container === 'Outbox'"
      class="img-circle rounded-circle">
 
-       <img src="{{message.recipientMainPhotoUrl || './assets/user.png'}}"
+       <img src="{{message.recipientMainPhotoUrl || './assets/defaultAvatar.png'}}"
        alt="{{message.recipientUsername}}">
        <strong>{{message.recipientUsername }}</strong>
      </div>
@@ -46,7 +46,7 @@
      <div *ngIf="container !== 'Outbox'"
      class="img-circle rounded-circle">
 
-       <img src="{{message.senderMainPhotoUrl || './assets/user.png'}}"
+       <img src="{{message.senderMainPhotoUrl || './assets/defaultAvatar.png'}}"
        alt="{{message.senderUsername}}">
        <strong>{{message.senderUsername }}</strong>
      </div>
@@ -59,9 +59,9 @@
   </table>
 </div>
 
-<div class="d-flex justify-content-center" *ngIf="pagination">
-  <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
-  [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)"
+<div class="d-flex justify-content-center" *ngIf="paginationMessages">
+  <pagination [boundaryLinks]="true" [totalItems]="paginationMessages.totalItems" [itemsPerPage]="paginationMessages.itemsPerPage"
+  [(ngModel)]="paginationMessages.currentPage" (pageChanged)="pageChanged($event)"
   previousText="&lsaquo;" nextText="&rsaquo;"
   firstText="&laquo;" lastText="&raquo;">
 </pagination>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -12,6 +13,7 @@ import { AccountService } from '../services/account.service';
 })
 export class NavComponent implements OnInit {
 model: any = {};
+@ViewChild('loginForm') loginForm: NgForm;
 currentUser$: Observable<IUser>;
   constructor(private account: AccountService, private router: Router,
               private toastr: ToastrService) { }

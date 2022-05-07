@@ -52,11 +52,11 @@ return this.http.post(this.baseUrl + 'account/register', model).pipe(
   }
 
   setCurrentUser(user: IUser): void {
+    // jwt.io
     const roles = this.getDecodedToken(user.token).role;
-    console.log(roles);
     Array.isArray(roles) ? user.roles = roles : user.roles = [roles];
+    user.userId = this.getDecodedToken(user.token).nameid;
     localStorage.setItem('user', JSON.stringify(user));
-    console.log(user);
     this.currentUserSource.next(user);
   }
 

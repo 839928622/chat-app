@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IPagination } from 'src/app/models/IPagination';
+import { IOffsetPagination } from 'src/app/models/IOffsetPagination';
 import { IMember } from 'src/app/models/member';
 import { MemberFilter } from 'src/app/models/memberFilter';
 import { MembersService } from 'src/app/services/members.service';
@@ -12,7 +12,7 @@ import { MembersService } from 'src/app/services/members.service';
 })
 export class MemberListComponent implements OnInit {
   members: IMember[];
-  pagination: IPagination;
+  pagination: IOffsetPagination<IMember[]>;
   pageNumber = 1;
   pageSize = 5;
   memberFilter = new MemberFilter();
@@ -27,8 +27,8 @@ export class MemberListComponent implements OnInit {
 
   loadMembers(): void {
     this.memberService.getMembers(this.memberFilter).subscribe(response => {
-      this.members = response.result;
-      this.pagination = response.pagination;
+      this.members = response.data;
+      this.pagination = response;
     });
   }
 

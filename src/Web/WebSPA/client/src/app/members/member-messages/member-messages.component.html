@@ -7,14 +7,14 @@
     <div *ngIf="(recentMessageBetweenTwoMembers$ | async )?.length ===0">
       {{'member-messages.no-messages' | translate}}
     </div>
-    <ul
+    <ng-container
 
     *ngIf="(recentMessageBetweenTwoMembers$ | async )?.length > 0">
-      <li *ngFor="let message of (recentMessageBetweenTwoMembers$ | async )">
+      <ng-container *ngFor="let message of (recentMessageBetweenTwoMembers$ | async )">
 
-        <div *ngIf="message.senderId == currentUserId">
+        <div  style="display: flex;" [ngStyle]="{'flex-direction': message.senderId == currentUserId ? 'row-reverse' : 'row'}">
           <span class="chat-img float-right">
-            <img class="rounded-circle" src="{{currentUserMainPhotoUrl || './assets/defaultAvatar.png'}}" alt="User Main Photo Url">
+            <img class="rounded-circle" src="{{message.senderId == currentUserId ? currentUserMainPhotoUrl : anotherUserMainPhotoUrl || './assets/defaultAvatar.png'}}" alt="User Main Photo Url">
           </span>
           <div class="chat-body">
             <div class="header">
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div *ngIf="message.senderId != currentUserId">
+        <!-- <div *ngIf="message.senderId != currentUserId" style="display: flex;  flex-direction: row;">
           <span class="chat-img float-left">
             <img class="rounded-circle" src="{{anotherUserMainPhotoUrl || './assets/defaultAvatar.png'}}" alt="User Main Photo Url">
           </span>
@@ -50,9 +50,9 @@
             </div>
             <p>{{ message.content }}</p>
           </div>
-        </div>
-      </li>
-    </ul>
+        </div> -->
+      </ng-container>
+    </ng-container>
   </div>
 
   <div class="card-footer">

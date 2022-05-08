@@ -18,6 +18,12 @@ onlineUsers$ = new Observable<string[]>();
 
   ngOnInit(): void {
     this.onlineUsers$ = this.presenceService.onlineUsers$;
+    // loading member photos
+    this.memberService.getPhotosByUserId(this.member.id).subscribe( photos =>
+      {
+        this.member.photos = photos;
+        this.member.mainPhotoUrl = photos.find(x => x.isMain)?.url;
+      });
   }
 
   addLike(member: IMember): void{

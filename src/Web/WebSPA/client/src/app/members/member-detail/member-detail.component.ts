@@ -45,6 +45,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
     this.route.data.subscribe(data => {
       this.member = data.member;
+      // loading member photos
+      this.memberService.getPhotosByUserId(this.member.id).subscribe( photos =>
+        {
+          this.member.photos = photos;
+          this.member.mainPhotoUrl = photos.find(x => x.isMain)?.url;
+        });
     });
 
     // loading user photos
@@ -95,8 +101,11 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     if (tabId === 3) {
      // this.loadMessages();
       this.messageService.createHubConnection(this.currentUser, this.member.id);
-      // get recent 5 messages
-      this.messageService.getRecentMessagesBetweenTwoUsers(this.member.id + '');
+      // get recent 5 messages. why we need to reload recent message ? if we swap bewteen tabs, member-message-compoment HTML page
+      // will automatically unsubscribe any Observable object.so 'recentMessageBetweenTwoMembers$' will be automatically unsubscribe
+      this.messageService.getRecentMessagesBetweenTwoUsers(this.member.id + '').subscribe( offsetPaginatedMessage => {
+        this.messageService.publishMessagesToMessageSource(offsetPaginatedMessage.data);
+      });
     } else{
       this.messageService.stopHubConnection();
     }

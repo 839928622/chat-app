@@ -20,14 +20,17 @@ export class TranslateComponent implements OnInit {
     // console.log(browerLanguage);
     switch (browerLanguage) {
      case 'en':
-      translate.use('en-US');
-      break;
-       case 'zh':
+        translate.use('en-US');
+        this.intl.strings = englishStrings;
+        break;
+     case 'zh':
         translate.use('zh-CN');
+        this.intl.strings = ChineseStrings;
         break;
      default:
-      translate.use('en-US');
-      break;
+        translate.use('en-US');
+        this.intl.strings = englishStrings;
+        break;
    }
    }
 

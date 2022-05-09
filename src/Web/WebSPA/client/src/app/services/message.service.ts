@@ -57,11 +57,11 @@ export class MessageService {
       });
     });
 
-     // listening on  'MarkMessagesAsRead' event
-    this.HubConnection.on('MarkMessagesAsRead', () => {
+     // listening on  'MarkMessagesAsRead' event   userId means this user mark messages as read
+    this.HubConnection.on('MarkMessagesAsRead', (userId: number) => {
         this.recentMessage$.pipe(take(1)).subscribe(oldMessages => {
           oldMessages.forEach(message => {
-            if (message.dateRead === null) {
+            if (message.dateRead === null && message.recipientId === userId) {
               message.dateRead = new Date(Date.now());
             }
           });
@@ -129,5 +129,18 @@ export class MessageService {
   {
     console.log('message', messages);
     this.messageThreadSource.next(messages.sort((a, b) =>  a.messageSent > b.messageSent ? 1 : -1 )); // asc
+  }
+
+  /**
+   * mark messages as Read
+   * @param UserIdThatIamTalkingTo user's  Id That Iam Talking To
+   * @returns void. nothing will be returnd
+   */
+  public markMessagesAsRead(UserIdThatIamTalkingTo: number): void {
+    try {
+       this.HubConnection.invoke('MarkMessagesAsRead', UserIdThatIamTalkingTo);
+    } catch (error) {
+      return console.log(error);
+    }
   }
 }

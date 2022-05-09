@@ -49,6 +49,8 @@ export class MemberMessagesComponent implements OnInit {
     this.messageService.sendMessage(this.userIdThatIamTalkingTo, this.messageContent)
     .then(() => {
       this.messageForm.reset();
+      // after sending a new messages,then will assume previous messages are read
+      this.messageService.markMessagesAsRead(this.userIdThatIamTalkingTo);
     });
   //   .subscribe(message => {
   //     this.messages.push(message);

@@ -157,11 +157,13 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc />
-        public async Task MarkMessagesAsReadAsync(int currentUserId)
+        public async Task MarkMessagesAsReadAsync(int currentUserId,int anotherUserId)
         {
             // mark message to read because current user was reading
-            var unreadMessages = _context.Message.Where(m => m.DateRead == null
-                                                     && m.RecipientId == currentUserId).ToList();
+            var unreadMessages = _context.Message
+                .Where( m=> m.RecipientId == currentUserId
+                                 && m.SenderId == anotherUserId
+                                 &&  m.DateRead == null).ToList();
             if (unreadMessages.Any())
             {
                 foreach (var message in unreadMessages)

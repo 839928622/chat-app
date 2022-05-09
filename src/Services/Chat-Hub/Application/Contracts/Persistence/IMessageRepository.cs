@@ -37,12 +37,13 @@ namespace Application.Contracts.Persistence
         /// <returns></returns>
         Task<MessageDto?> GetMessageByIdFromCache(int id);
 
-        /// <summary>
-        ///Messages received by currentUser, then Mark Messages As Read
-        /// </summary>
-        /// <param name="currentUserId">The user that currently has logged in</param>
-        /// <returns></returns>
-        Task MarkMessagesAsReadAsync(int currentUserId);
+        ///  <summary>
+        /// Messages received by currentUser, then Mark Messages As Read
+        ///  </summary>
+        ///  <param name="currentUserId">The user that currently has logged in</param>
+        ///  <param name="anotherUserId">user that I am talking to</param>
+        ///  <returns></returns>
+        Task MarkMessagesAsReadAsync(int currentUserId, int anotherUserId);
 
 
     }

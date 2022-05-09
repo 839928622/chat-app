@@ -20,10 +20,10 @@
             <div class="header">
               <small class="text-muted">
                 <span class="fa fa-clock-o">{{message.messageSent | timeago }}</span>
-                <span class="text-danger" *ngIf="!message.dateRead && message.senderId !== userIdThatIamTalkingTo">
+                <span class="text-danger" *ngIf="!message.dateRead">
                   ({{'member-messages.unread' | translate}})
                 </span>
-                <span class="text-success" *ngIf="message.dateRead && message.recipientId !== userIdThatIamTalkingTo">
+                <span class="text-success" *ngIf="message.dateRead">
                   ({{'member-messages.read' | translate}} {{message.dateRead | timeago}})
                 </span>
               </small>

@@ -111,11 +111,11 @@ namespace ChatHub.API.SignalR
             // current User Id
             var callerUserId = Context.User!.GetRequiredUserId();
             
-            await _messageRepository.MarkMessagesAsReadAsync(callerUserId);
+            await _messageRepository.MarkMessagesAsReadAsync(callerUserId, anotherUserId);
 
             var groupName = GetGroupName(callerUserId.ToString(), anotherUserId.ToString());
             // client will listen 'MarkMessagesAsRead' while connection setup
-            await Clients.Groups(groupName).SendAsync("MarkMessagesAsRead");
+            await Clients.Groups(groupName).SendAsync("MarkMessagesAsRead", callerUserId);
 
         }
 

@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
+using Application.Configurations;
 using Application.Extensions;
+using ChatHub.API.Filters;
 using ChatHub.API.Middleware;
 using ChatHub.API.SignalR;
 using Domain.Entities;
@@ -18,6 +20,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 var services=builder.Services.AddSwaggerGen();
 var configuration = builder.Configuration;
+// binding
+services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
+
 services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -37,6 +42,7 @@ services.AddSingleton<PresenceTracker>();
 services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ChatApp API", Version = "v1" });
+    options.OperationFilter<SwaggerSkipPropertyFilter>();
     var securitySchema = new OpenApiSecurityScheme()
     {
         Description = "JWT Auth Bearer Schema",
@@ -56,6 +62,7 @@ services.AddSwaggerGen(options =>
         {securitySchema, new List<string>() {JwtBearerDefaults.AuthenticationScheme} }
     };
     options.AddSecurityRequirement(securityRequirement);
+   
 });
 //cors
 services.AddCors(options =>

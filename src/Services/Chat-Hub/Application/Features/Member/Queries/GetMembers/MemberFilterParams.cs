@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Application.Attributes;
 using MediatR;
 using Shared.Common;
 using Shared.Enums.AppUserEntity;
 
 namespace Application.Features.Member.Queries.GetMembers
 {
+    
     public class MemberFilterParams : PaginationRequestParams, IValidatableObject,IRequest<PaginationResult<MemberToReturnDto>>
     {
-        
+        [SwaggerIgnore]
         public int CurrentUserId { get; set; }
 
         public Gender Gender { get; set; }

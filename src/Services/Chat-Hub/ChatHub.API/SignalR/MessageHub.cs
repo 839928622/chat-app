@@ -6,10 +6,11 @@ using Application.Features.Message.Queries.MessageForUser;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using SignalRSwaggerGen.Attributes;
 
 namespace ChatHub.API.SignalR
 {
-
+    [SignalRHub(path:"hubs/message")]
     public class MessageHub : Hub
     {
        

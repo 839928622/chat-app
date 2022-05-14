@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +28,15 @@ services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
 services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 
 });
+// 
+
+
 // Application
 services.AddApplicationServices();
 // Infrastructure
@@ -42,6 +47,8 @@ services.AddSingleton<PresenceTracker>();
 services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo() { Title = "ChatApp API", Version = "v1" });
+    // Signalr live documentation
+    options.AddSignalRSwaggerGen();
     options.OperationFilter<SwaggerSkipPropertyFilter>();
     var securitySchema = new OpenApiSecurityScheme()
     {

@@ -38,6 +38,9 @@ you also can view [it](https://github.com/839928622/chat-app/tree/main/src/Asset
 
 <img src="src/Assets/Images/ERD.png"  />
 
+### Cache Strategy
+<img src="src/Assets/CacheStrategy/CacheStrategy.png"  />
+
 ### chatting image
 
 <img src="src/Assets/Images/chatting.png"  />

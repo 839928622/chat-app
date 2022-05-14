@@ -1,4 +1,6 @@
-﻿using Application.Features.Member.Queries.GetMembers;
+﻿using Application.Features.Member.Commands.UpdateUser;
+using Application.Features.Member.Queries.GetMembers;
+using Domain.Common;
 using Domain.Entities;
 using Shared.Common;
 
@@ -21,11 +23,26 @@ namespace Application.Contracts.Persistence
         /// <returns></returns>
         Task<PaginationResult<MemberToReturnDto>> GetMembersAsync(MemberFilterParams memberFilter);
         /// <summary>
-        /// get user(member) profile by user id , without sensitive info 
+        /// get user(member) profile by user id(cache involved) , without sensitive info 
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<MemberToReturnDto?> GetMemberInfoById(int userId);
+        /// <summary>
+        /// remove user cache by user id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task RemoveUserCacheById(int userId);
+
+        /// <summary>
+        /// update user profile and remove user cache
+        ///  
+        /// </summary>
+        /// <param name="updateUserProfileRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task UpdateUserProfile(UpdateUserProfileRequest updateUserProfileRequest, CancellationToken cancellationToken);
     }
 
 

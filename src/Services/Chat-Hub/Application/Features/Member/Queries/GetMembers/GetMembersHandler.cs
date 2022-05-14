@@ -4,11 +4,11 @@ using Shared.Common;
 
 namespace Application.Features.Member.Queries.GetMembers
 {
-    public class GetMembersHandle : IRequestHandler<MemberFilterParams, PaginationResult<MemberToReturnDto>>
+    public class GetMembersHandler : IRequestHandler<MemberFilterParams, PaginationResult<MemberToReturnDto>>
     {
         private readonly IUserRepository _userRepository;
 
-        public GetMembersHandle(IUserRepository userRepository)
+        public GetMembersHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

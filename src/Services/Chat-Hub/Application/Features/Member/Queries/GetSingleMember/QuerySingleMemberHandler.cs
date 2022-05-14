@@ -9,11 +9,11 @@ using MediatR;
 
 namespace Application.Features.Member.Queries.GetSingleMember
 {
-    public class QuerySingleMemberHandle : IRequestHandler<SingleMemberRequest,MemberToReturnDto?>
+    public class QuerySingleMemberHandler : IRequestHandler<SingleMemberRequest,MemberToReturnDto?>
     {
         private readonly IUserRepository _userRepository;
 
-        public QuerySingleMemberHandle(IUserRepository userRepository)
+        public QuerySingleMemberHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

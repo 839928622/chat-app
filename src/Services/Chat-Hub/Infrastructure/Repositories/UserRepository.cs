@@ -1,10 +1,13 @@
 ﻿using Application.Configurations;
 using Application.Contracts.Persistence;
+using Application.Features.Member.Commands.UpdateUser;
 using Application.Features.Member.Queries.GetMembers;
 using Dapper;
+using Domain.Common;
 using Domain.Entities;
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Common;
 using Shared.Enums.RedisUsage;
+using Shared.MQ.RemoveCacheByKey;
 
 namespace Infrastructure.Repositories
 {
@@ -22,15 +26,18 @@ namespace Infrastructure.Repositories
         private readonly IDistributedCache _distributedCache;
         private readonly ILogger<UserRepository> _logger;
         private readonly IOptions<ConnectionStrings> _connectionStringsOptions;
+        private readonly IPublishEndpoint _publishEndpoint;
 
 
         public UserRepository(ChatAppContext dbxContext, IDistributedCache distributedCache,
-                              ILogger<UserRepository> logger, IOptions<ConnectionStrings> connectionStringsOptions) : base(dbxContext)
+                              ILogger<UserRepository> logger, IOptions<ConnectionStrings> connectionStringsOptions,
+                              IPublishEndpoint publishEndpoint) : base(dbxContext)
         {
             _context = dbxContext;
             _distributedCache = distributedCache;
             _logger = logger;
             _connectionStringsOptions = connectionStringsOptions;
+            _publishEndpoint = publishEndpoint;
         }
 
 
@@ -90,7 +97,7 @@ namespace Infrastructure.Repositories
         /// <inheritdoc />
         public async Task<MemberToReturnDto?> GetMemberInfoById(int userId)
         {
-            _logger.LogInformation($"current threadId:{Thread.CurrentThread.ManagedThreadId}");
+            
             var key = $"{RedisKeyCategory.Cache}:{nameof(AppUser)}:{userId}";
             var recordInCache = await _distributedCache.GetRecordAsync<AppUser>(key);
             if (recordInCache != null)
@@ -165,6 +172,31 @@ namespace Infrastructure.Repositories
             //    City = user.City,
             //    Country = user.Country
             //};
+        }
+
+        /// <inheritdoc />
+        public async Task RemoveUserCacheById(int userId)
+        {
+            var key = $"{RedisKeyCategory.Cache}:{nameof(AppUser)}:{userId}";
+            await _distributedCache.RemoveAsync(key);
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateUserProfile(UpdateUserProfileRequest updateUserProfileRequest, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users.SingleAsync(x => x.Id == updateUserProfileRequest.CurrentUserId, cancellationToken);
+            user.City = updateUserProfileRequest.City;
+            user.Country = updateUserProfileRequest.Country;
+            user.Interests = updateUserProfileRequest.Interests;
+            user.Introduction = updateUserProfileRequest.Introduction;
+            user.LookingFor = updateUserProfileRequest.LookingFor;
+            await _context.SaveChangesAsync(cancellationToken);
+            await _publishEndpoint.Publish<RemoveUserCache>(new RemoveUserCache()
+            {
+                UserId = updateUserProfileRequest.CurrentUserId
+            }, cancellationToken);
+
+
         }
     }
 }

@@ -4,10 +4,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { IOffsetPagination } from '../models/IOffsetPagination';
-
 import { IMember } from '../models/member';
 import { MemberFilter } from '../models/memberFilter';
 import { IPhoto } from '../models/photo';
+
 
 // const httpOptions = {
 //   headers: new HttpHeaders({
@@ -51,8 +51,13 @@ export class MembersService {
     return this.http.get<IMember>(this.baseUrl + 'Member/' + userId);
   }
 
+  /**
+   * update member profile
+   * @param member member profile. interests, introduction etc.
+   * @returns null
+   */
   updateMember(member: IMember): Observable<unknown> {
-    return this.http.put(this.baseUrl + 'users', member);
+    return this.http.put(this.baseUrl + 'member/UpdateMemberProfile', member);
   }
 
   setMainPhoto(photoId: number): Observable<object>{

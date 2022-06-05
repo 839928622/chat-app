@@ -3,11 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { IOffsetPagination } from '../models/IOffsetPagination';
 import { IMember } from '../models/member';
 import { MemberFilter } from '../models/memberFilter';
+import { OffsetPagination } from '../models/OffsetPagination';
 import { IPhoto } from '../models/photo';
-
 
 // const httpOptions = {
 //   headers: new HttpHeaders({
@@ -16,38 +15,50 @@ import { IPhoto } from '../models/photo';
 // };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MembersService {
   baseUrl = environment.baseUrl;
-  paginationResult: IOffsetPagination<IMember[]>;
-  constructor(private http: HttpClient) { }
+  paginationResult: OffsetPagination<IMember[]>;
+  constructor(private http: HttpClient) {}
 
-  getMembers(memberFilter: MemberFilter): Observable<IOffsetPagination<IMember[]>> {
-     let params = this.producePaginationHeaders(memberFilter.pageNumber, memberFilter.pageSize);
-
-     params = params.append('maxAge', memberFilter.maxAge.toString());
-     params = params.append('minAge', memberFilter.minAge.toString());
-     params = params.append('orderBy', memberFilter.orderBy);
-     if (memberFilter.gender) {
-      params = params.append('gender', memberFilter.gender);
-     }
-
-     return this.http.get<IOffsetPagination<IMember[]>>(this.baseUrl + 'Member/GetMembers', {params}).pipe(
-      map(response => {
-        return response;
-      })
+  getMembers(
+    memberFilter: MemberFilter
+  ): Observable<OffsetPagination<IMember[]>> {
+    let params = this.producePaginationHeaders(
+      memberFilter.pageNumber,
+      memberFilter.pageSize
     );
+
+    params = params.append('maxAge', memberFilter.maxAge.toString());
+    params = params.append('minAge', memberFilter.minAge.toString());
+    params = params.append('orderBy', memberFilter.orderBy);
+    if (memberFilter.gender) {
+      params = params.append('gender', memberFilter.gender);
+    }
+
+    return this.http
+      .get<OffsetPagination<IMember[]>>(this.baseUrl + 'Member/GetMembers', {
+        params,
+      })
+      .pipe(
+        map((response) => {
+          return response;
+        })
+      );
   }
 
-  private producePaginationHeaders(pageNumber: number, pageSize: number): HttpParams {
+  private producePaginationHeaders(
+    pageNumber: number,
+    pageSize: number
+  ): HttpParams {
     let params = new HttpParams();
-      // params.append('pageNumber', pageNumber.toString()); == http://localhost/users?pageNumber=pageNumber
+    // params.append('pageNumber', pageNumber.toString()); == http://localhost/users?pageNumber=pageNumber
     params = params.append('pageNumber', pageNumber.toString());
     params = params.append('pageSize', pageSize.toString());
     return params;
   }
-  getSingleMember(userId: string): Observable<IMember>{
+  getSingleMember(userId: string): Observable<IMember> {
     return this.http.get<IMember>(this.baseUrl + 'Member/' + userId);
   }
 
@@ -60,7 +71,7 @@ export class MembersService {
     return this.http.put(this.baseUrl + 'member/UpdateMemberProfile', member);
   }
 
-  setMainPhoto(photoId: number): Observable<object>{
+  setMainPhoto(photoId: number): Observable<object> {
     return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
   }
 
@@ -72,8 +83,10 @@ export class MembersService {
     return this.http.post(this.baseUrl + 'like/' + username, {});
   }
 
-  getLikes(predicate: string): Observable<Partial<IMember[]>>{
-    return this.http.get<Partial<IMember[]>>(this.baseUrl + 'like?predicate=' + predicate);
+  getLikes(predicate: string): Observable<Partial<IMember[]>> {
+    return this.http.get<Partial<IMember[]>>(
+      this.baseUrl + 'like?predicate=' + predicate
+    );
   }
 
   /**
@@ -81,8 +94,9 @@ export class MembersService {
    * @param userid  user identifier
    * @returns An Array that containing the  user photos
    */
-   getPhotosByUserId(userid: number): Observable<IPhoto[]>
-   {
-     return this.http.get<IPhoto[]>(this.baseUrl + 'member/UserPhotos/' + userid);
-   }
+  getPhotosByUserId(userid: number): Observable<IPhoto[]> {
+    return this.http.get<IPhoto[]>(
+      this.baseUrl + 'member/UserPhotos/' + userid
+    );
+  }
 }

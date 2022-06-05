@@ -9,52 +9,58 @@ import { IUser } from '../models/user';
 import { environment } from './../../environments/environment';
 import { PresenceService } from './presence.service';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
-baseUrl = environment.baseUrl;
-private currentUserSource = new ReplaySubject<IUser>(1);
-currentUser$ = this.currentUserSource.asObservable();
+  baseUrl = environment.baseUrl;
+  private currentUserSource = new ReplaySubject<IUser>(1);
+  currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private http: HttpClient, private router: Router,
-              private toastr: ToastrService, private presenceService: PresenceService,
-              private translate: TranslateService
-              ) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private toastr: ToastrService,
+    private presenceService: PresenceService,
+    private translate: TranslateService
+  ) {
     console.log(this.currentUserSource);
-    console.log(this.currentUser$ );
+    console.log(this.currentUser$);
   }
   login(model: any): Observable<void> {
-    return this.http.post<IUser>(this.baseUrl + 'account/login', model).pipe( map( (response: IUser) => {
-      if (response) {
-        // localStorage.setItem('user', JSON.stringify(response));
-        // this.currentUserSource.next(response);
-        this.setCurrentUser(response);
-        this.translate.stream('account-service.welcome').pipe(take(1)).subscribe( (welcome: string) => {
-          this.toastr.success(welcome + ' ' + response.userName, '');
-        });
-        this.presenceService.createHubConnection(response);
-        this.router.navigateByUrl('/members');
-      }
-
-    }));
+    return this.http.post<IUser>(this.baseUrl + 'account/login', model).pipe(
+      map((response: IUser) => {
+        if (response) {
+          // localStorage.setItem('user', JSON.stringify(response));
+          // this.currentUserSource.next(response);
+          this.setCurrentUser(response);
+          this.translate
+            .stream('account-service.welcome')
+            .pipe(take(1))
+            .subscribe((welcome: string) => {
+              this.toastr.success(welcome + ' ' + response.userName, '');
+            });
+          this.presenceService.createHubConnection(response);
+          this.router.navigateByUrl('/members');
+        }
+      })
+    );
   }
 
   register(model: any): Observable<void> {
-return this.http.post(this.baseUrl + 'account/register', model).pipe(
-  map((user: IUser) => {
-    if (user){
-
-      this.setCurrentUser(user);
-      this.presenceService.createHubConnection(user);
-    }
-  })
-);
+    return this.http.post(this.baseUrl + 'account/register', model).pipe(
+      map((user: IUser) => {
+        if (user) {
+          this.setCurrentUser(user);
+          this.presenceService.createHubConnection(user);
+        }
+      })
+    );
   }
 
   setCurrentUser(user: IUser): void {
     // jwt.io
     const roles = this.getDecodedToken(user.token).role;
-    Array.isArray(roles) ? user.roles = roles : user.roles = [roles];
+    Array.isArray(roles) ? (user.roles = roles) : (user.roles = [roles]);
     user.userId = this.getDecodedToken(user.token).nameid;
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
@@ -67,9 +73,7 @@ return this.http.post(this.baseUrl + 'account/register', model).pipe(
     this.router.navigateByUrl('/');
   }
 
-  getDecodedToken(token: string): any
-  {
-    return JSON.parse(atob(token.split('.')[1]));
+  getDecodedToken(token: string): any {
+    return JSON.parse(window.atob(token.split('.')[1]));
   }
-
- }
+}

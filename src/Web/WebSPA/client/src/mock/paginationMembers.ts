@@ -1,4 +1,4 @@
-export const members: any = {
+export const paginatedmembers: any = {
   data:
   [{
     id: 1 ,
